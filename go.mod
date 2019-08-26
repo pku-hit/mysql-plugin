@@ -1,4 +1,4 @@
-module mysql-plugin
+module github.com/pku-hit/mysql-plugin
 
 go 1.12
 
