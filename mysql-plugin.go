@@ -5,6 +5,8 @@ import (
 	"github.com/jinzhu/configor"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
 )
 
@@ -19,7 +21,11 @@ var Database = struct {
 var db *gorm.DB
 
 func init() {
-	configor.Load(&Database, "config/database.yml")
+	config, errRd := ioutil.ReadFile("config/database.yml")
+	if errRd != nil {
+		fmt.Print(errRd)
+	}
+	yaml.Unmarshal(config, &Database)
 
 	var err error
 	db, err = gorm.Open(Database.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
