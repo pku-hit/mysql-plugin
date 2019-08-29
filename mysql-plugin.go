@@ -2,7 +2,6 @@ package mysql_plugin
 
 import (
 	"fmt"
-	"github.com/jinzhu/configor"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"gopkg.in/yaml.v2"
