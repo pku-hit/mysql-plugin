@@ -17,7 +17,7 @@ var Database = struct {
 	Name     string `yaml:"name"`
 }{}
 
-var db *gorm.DB
+var Db *gorm.DB
 
 func init() {
 	config, errRd := ioutil.ReadFile("config/database.yml")
@@ -27,7 +27,7 @@ func init() {
 	yaml.Unmarshal(config, &Database)
 
 	var err error
-	db, err = gorm.Open(Database.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	Db, err = gorm.Open(Database.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		Database.User,
 		Database.Password,
 		Database.Host,
@@ -36,12 +36,12 @@ func init() {
 		log.Fatalf("models.Setup err: %v", err)
 	}
 
-	db.SingularTable(true)
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
+	Db.SingularTable(true)
+	Db.DB().SetMaxIdleConns(10)
+	Db.DB().SetMaxOpenConns(100)
 }
 
 // CloseDB closes database connection (unnecessary)
 func CloseDB() {
-	defer db.Close()
+	defer Db.Close()
 }
