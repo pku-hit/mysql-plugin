@@ -11,10 +11,12 @@ import (
 
 var Database = struct {
 	Type     string `yaml:"type"`
+	Protocol string `yaml:"protocol"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	Host     string `yaml:"host"`
 	Name     string `yaml:"name"`
+	Param    string `yaml:"param"`
 }{}
 
 var Db *gorm.DB
@@ -27,11 +29,13 @@ func init() {
 	yaml.Unmarshal(config, &Database)
 
 	var err error
-	Db, err = gorm.Open(Database.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	Db, err = gorm.Open(Database.Type, fmt.Sprintf("%s:%s@%s(%s)/%s?%s",
 		Database.User,
 		Database.Password,
+		Database.Protocol,
 		Database.Host,
-		Database.Name))
+		Database.Name,
+		Database.Param))
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
 	}
